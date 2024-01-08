@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Exo+2:wght@300&family=Inter:wght@500&family=Nunito&family=Permanent+Marker&family=Poppins:wght@500&family=Shadows+Into+Light&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body {
+    background: #212121;
+    font-family: 'Exo 2', cursive;
+}
+
+.pagination {
+    margin-left: 400px;
+    margin-right: 400px;
+    margin-bottom: 50px;
+
+
+}
+
+
+.page-item .page-link {
+    position: relative;
+    display: block;
+    margin: 0 2px;
+    min-height: 40px;
+    min-width: 40px;
+    text-align: center;
+    text-decoration: none;
+    color: #40B5CB;
+    border-color: #40B5CB;
+    border-width: 2px;
+    background-color: #212121;
+
+}
+
+.page-item a.page-link:hover {
+    color: black;
+    background-color: #BCDA3F;
+}
+
+
+
+.page-item.active .page-link {
+    color: black;
+    background-color: #40B5CB;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.page-item.disabled .page-link {
+    color: #40B5CB;
+    background-color: #212121;
+    border-color: #40B5CB;
+
+}
