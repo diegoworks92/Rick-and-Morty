@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import SearchComponent from './SearchComponent';
-import Pagination from './Pagination';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import PaginationComponent from './PaginationComponent';
+
 import NotFound from './NotFound';
 import Status from './Status';
+import Filter from './Filter';
+import FetchCharacters from './FetchCharacters';
 
 export const CharactersCards = () => {
     const [search, setSearch] = useState('');
@@ -11,93 +13,176 @@ export const CharactersCards = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
-    useEffect(() => {
-        const fetchCharacters = async () => {
-            const response = await fetch(
-                `https://rickandmortyapi.com/api/character/?name=${search}&page=${currentPage}`
-            );
-            const data = await response.json();
-            if (data.results) {
-                setCharacters(data.results);
-                setTotalPages(data.info.pages);
-            } else {
-                setCharacters([]);
-                setTotalPages(0);
-            }
-        };
+    const [filters, setFilters] = useState({
+        species: '',
+        status: '',
+        name: '',
+        gender: '',
+    });
 
-        fetchCharacters();
-    }, [search, currentPage]);
+    let filteredCharacters = characters;
+
+    if (filters.name === 'A-Z') {
+        filteredCharacters = filteredCharacters.sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+    } else if (filters.name === 'Z-A') {
+        filteredCharacters = filteredCharacters.sort((a, b) =>
+            b.name.localeCompare(a.name)
+        );
+    }
+
+    if (filters.status === 'Alive') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.status === 'Alive'
+        );
+    } else if (filters.status === 'Dead') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.status === 'Dead'
+        );
+    } else if (filters.status === 'unknown') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.status === 'unknown'
+        );
+    }
+
+    if (filters.species === 'Alien') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Alien'
+        );
+    } else if (filters.species === 'Animal') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Animal'
+        );
+    } else if (filters.species === 'Cronenberg') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Cronenberg'
+        );
+    } else if (filters.species === 'Human') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Human'
+        );
+    } else if (filters.species === 'Humanoid') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Humanoid'
+        );
+    } else if (filters.species === 'Mythological Creature') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Mythological Creature'
+        );
+    } else if (filters.species === 'Poopybutthole') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Poopybutthole'
+        );
+    } else if (filters.species === 'Robot') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'Robot'
+        );
+    } else if (filters.species === 'unknown') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.species === 'unknown'
+        );
+    }
+
+    if (filters.gender === 'Female') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.gender === 'Female'
+        );
+    } else if (filters.gender === 'Male') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.gender === 'Male'
+        );
+    } else if (filters.gender === 'Genderless') {
+        filteredCharacters = filteredCharacters.filter(
+            (character) => character.gender === 'Genderless'
+        );
+    }
+
+    <FetchCharacters
+        search={search}
+        setCharacters={setCharacters}
+        setTotalPages={setTotalPages}
+        filters={filters}
+        currentPage={currentPage}
+    />;
+
+    useEffect(() => {
+        FetchCharacters({
+            search: search,
+            setCharacters: setCharacters,
+            setTotalPages: setTotalPages,
+            filters: filters,
+            currentPage: currentPage,
+        });
+    }, [search, currentPage, filters]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    const [openAccordion, setOpenAccordion] = useState(null);
-
     return (
         <>
-            <SearchComponent setSearch={setSearch} />
-            <Pagination
+            <div className="flex flex-wrap justify-around m-10">
+                <SearchComponent setSearch={setSearch} />
+                <Filter setFilters={setFilters} />
+            </div>
+            <PaginationComponent
                 total={totalPages}
                 current={currentPage}
                 onPageChange={handlePageChange}
             />
 
-            {characters.length > 0 ? (
-                <div className="text-[#40B5CB] relative card grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 place-items-center mb-6">
-                    {characters.map((item) => (
+            {filteredCharacters.length > 0 ? (
+                <div className=" flex flex-wrap justify-center">
+                    {filteredCharacters.map((item) => (
                         <div
                             key={item.id}
-                            className="border-4 border-[#40B5CB] rounded-md m-4 sm:w-48 w-64 mb-20"
+                            className="w-[345px] sm:w-full sm:max-w-xl rounded-2xl rounded-t-full sm:rounded-3xl sm:rounded-l-full flex border-4 border-[#40B5CB] flex-col sm:flex-row sm:mt-10 mb-10 sm:mx-2 2xl:mx-12 "
+                            id="widget"
                         >
-                            <img
-                                src={item.image}
-                                className="rounded-t-sm"
-                                alt=""
-                            />
-                            <Status item={item} />
-                            <h1
-                                className=" border-t-4 border-[#40B5CB] flex justify-center text-center items-center text-xl h-14 hover:cursor-pointer font-bold"
-                                onClick={() =>
-                                    setOpenAccordion(
-                                        openAccordion === item.id
-                                            ? null
-                                            : item.id
-                                    )
-                                }
-                            >
-                                {item.name}
-                            </h1>
-                            <div
-                                className="flex justify-center hover:cursor-pointer pb-0 mb-1"
-                                onClick={() =>
-                                    setOpenAccordion(
-                                        openAccordion === item.id
-                                            ? null
-                                            : item.id
-                                    )
-                                }
-                            >
-                                {openAccordion === item.id ? (
-                                    <IoIosArrowUp className="text-xl" />
-                                ) : (
-                                    <IoIosArrowDown className="text-xl" />
-                                )}
-                            </div>
-                            {openAccordion === item.id && (
-                                <div className=" absolute border-4 rounded-b-md border-[#40B5CB] sm:w-48 w-64 -ml-1">
-                                    <p className="pl-2 pt-1">
-                                        Species: {item.species}
-                                    </p>
-                                    <p className="pl-2">
-                                        Gender: {item.gender}
-                                    </p>
-                                    <p className="pl-2 pb-1">
-                                        Status: {item.status}
-                                    </p>
+                            <div className="py-6 pr-10 relative rounded-xl mx-auto w-auto bg-transparent flex items-center rounded-t-full sm:rounded-r-sm sm:rounded-l-full">
+                                <div className="sm:w-32 sm:h-32 relative left-5 sm:inline-block mx-auto overflow-hidden sm:rounded-full">
+                                    <img
+                                        src={item.image}
+                                        className="object-cover border-[#40B5CB] border-4 sm:w-full h-full rounded-full"
+                                    />
                                 </div>
-                            )}
+                                <Status item={item} />
+                            </div>
+                            <div className="bg-[#010101]">
+                                <div className="flex flex-col ml-2 p-4 w-[392px]">
+                                    <div className="flex justify-between items-center">
+                                        <h4 className="text-[#C8E63E] text-lg 2xl:text-2xl font-semibold mb-3">
+                                            {item.name}
+                                        </h4>
+                                        <span className="font-normal text-center text-sm text-black bg-[#40B5CB] mr-[70px] py-1 px-2 sm:mr-2 -mt-2 rounded-md">
+                                            {item.species}
+                                        </span>
+                                    </div>
+                                    <div className="mt-2 font-medium text-white">
+                                        <span className="text-[#C8E63E]">
+                                            Origin:
+                                        </span>{' '}
+                                        {item.origin.name}
+                                    </div>
+                                    <div className="mt-2 font-medium text-white">
+                                        <span className="text-[#C8E63E]">
+                                            Location:{' '}
+                                        </span>
+                                        {item.location.name}
+                                    </div>
+                                    <div className="mt-2 font-medium text-white">
+                                        <span className="text-[#C8E63E]">
+                                            Gender:
+                                        </span>{' '}
+                                        {item.gender}
+                                        <span className="text-[#C8E63E] ml-7">
+                                            Status:
+                                        </span>{' '}
+                                        {item.status}
+                                    </div>
+                                </div>{' '}
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -105,7 +190,7 @@ export const CharactersCards = () => {
                 <NotFound search={search} />
             )}
 
-            <Pagination
+            <PaginationComponent
                 total={totalPages}
                 current={currentPage}
                 onPageChange={handlePageChange}

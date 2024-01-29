@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Exo+2:wght@300&family=Inter:wght@500&family=Nunito&family=Permanent+Marker&family=Poppins:wght@500&family=Shadows+Into+Light&display=swap');
+@import "keep-react/css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
-
 body {
-    background: #212121;
+    background: url("https://static.vecteezy.com/system/resources/thumbnails/021/413/707/original/space-background-animation-white-particles-overlay-stars-backdrop-video.jpg") repeat, #212121;
     font-family: 'Exo 2', cursive;
 }
 
@@ -14,10 +14,7 @@ body {
     margin-left: 400px;
     margin-right: 400px;
     margin-bottom: 50px;
-
-
 }
-
 
 .page-item .page-link {
     position: relative;
@@ -31,14 +28,12 @@ body {
     border-color: #40B5CB;
     border-width: 2px;
     background-color: #212121;
-
 }
 
 .page-item a.page-link:hover {
     color: black;
     background-color: #BCDA3F;
 }
-
 
 
 .page-item.active .page-link {
@@ -49,7 +44,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 
 .page-item.disabled .page-link {
     color: #40B5CB;

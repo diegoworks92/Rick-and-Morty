@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from './Button';
 
-const SearchForm = ({ setSearch }) => {
+const SearchComponent = ({ setSearch }) => {
     const [inputValue, setInputValue] = useState('');
 
     const searchBtn = (e) => {
@@ -30,4 +30,4 @@ const SearchForm = ({ setSearch }) => {
     );
 };
 
-export default SearchForm;
+export default SearchComponent;

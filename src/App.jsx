@@ -1,10 +1,10 @@
-import { Titulo } from './components/Titulo';
+import { Title } from './components/Title';
 import { CharactersCards } from './components/CharactersCards';
 
 function App() {
     return (
         <>
-            <Titulo></Titulo>
+            <Title></Title>
             <CharactersCards />
         </>
     );
