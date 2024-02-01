@@ -1,9 +1,9 @@
 import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
 
-const Pagination = ({ total = 42, current, onPageChange }) => {
+const PaginationComponent = ({ total = 42, current, onPageChange }) => {
     return (
-        <div className="flex justify-center m-10">
+        <div className="flex justify-center">
             <ResponsivePagination
                 total={total}
                 current={current}
@@ -13,4 +13,4 @@ const Pagination = ({ total = 42, current, onPageChange }) => {
     );
 };
 
-export default Pagination;
+export default PaginationComponent;

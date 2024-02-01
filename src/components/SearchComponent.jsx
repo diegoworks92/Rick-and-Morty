@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from './Button';
 
-const SearchComponent = ({ setSearch }) => {
+const SearchComponent = ({ setSearch, setFiltering }) => {
     const [inputValue, setInputValue] = useState('');
 
     const searchBtn = (e) => {
@@ -16,7 +16,7 @@ const SearchComponent = ({ setSearch }) => {
     };
 
     return (
-        <form className="gap-3 sm:gap-4 sm:ml-5 mb-5 flex justify-center sm:justify-start">
+        <form className="gap-3 sm:gap-4 sm:ml-0 mb-5 flex justify-center sm:justify-start">
             <input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

@@ -12,7 +12,7 @@ export const CharactersCards = () => {
     const [characters, setCharacters] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-
+    const [filtering, setFiltering] = useState(false);
     const [filters, setFilters] = useState({
         species: '',
         status: '',
@@ -114,6 +114,14 @@ export const CharactersCards = () => {
             filters: filters,
             currentPage: currentPage,
         });
+        if (
+            search === '' &&
+            Object.values(filters).some((filter) => filter !== '')
+        ) {
+            setFiltering(true); // Establecer filtrado en verdadero si se aplica un filtro y la búsqueda está vacía
+        } else {
+            setFiltering(false); // Establecer filtrado en falso si se realiza una búsqueda
+        }
     }, [search, currentPage, filters]);
 
     const handlePageChange = (page) => {
@@ -122,22 +130,28 @@ export const CharactersCards = () => {
 
     return (
         <>
-            <div className="flex flex-wrap justify-around m-10">
-                <SearchComponent setSearch={setSearch} />
-                <Filter setFilters={setFilters} />
+            <div className="flex flex-wrap justify-center gap-4 sm:m-10 mb-9">
+                <SearchComponent
+                    setSearch={setSearch}
+                    setFiltering={setFiltering}
+                />
+                <Filter setFilters={setFilters} setFiltering={setFiltering} />
             </div>
-            <PaginationComponent
-                total={totalPages}
-                current={currentPage}
-                onPageChange={handlePageChange}
-            />
+
+            <div className="flex justify-center">
+                <PaginationComponent
+                    total={totalPages}
+                    current={currentPage}
+                    onPageChange={handlePageChange}
+                />
+            </div>
 
             {filteredCharacters.length > 0 ? (
                 <div className=" flex flex-wrap justify-center">
                     {filteredCharacters.map((item) => (
                         <div
                             key={item.id}
-                            className="w-[345px] sm:w-full sm:max-w-xl rounded-2xl rounded-t-full sm:rounded-3xl sm:rounded-l-full flex border-4 border-[#40B5CB] flex-col sm:flex-row sm:mt-10 mb-10 sm:mx-2 2xl:mx-12 "
+                            className="w-[350px] sm:w-full sm:max-w-xl rounded-2xl rounded-t-full sm:rounded-3xl sm:rounded-l-full flex border-4 border-[#40B5CB] flex-col sm:flex-row sm:mt-10 mb-10 sm:mx-2 xl:mx-8 2xl:mx-20 "
                             id="widget"
                         >
                             <div className="py-6 pr-10 relative rounded-xl mx-auto w-auto bg-transparent flex items-center rounded-t-full sm:rounded-r-sm sm:rounded-l-full">
@@ -149,13 +163,19 @@ export const CharactersCards = () => {
                                 </div>
                                 <Status item={item} />
                             </div>
-                            <div className="bg-[#010101]">
-                                <div className="flex flex-col ml-2 p-4 w-[392px]">
-                                    <div className="flex justify-between items-center">
-                                        <h4 className="text-[#C8E63E] text-lg 2xl:text-2xl font-semibold mb-3">
+                            <div className="bg-[#212121] relative h-44 sm:h-full">
+                                <div className="absolute bg-[#40B5CB] w-full h-1 sm:w-1 sm:h-full"></div>
+                                <div className="absolute right-0 bottom-0 triangle">
+                                    <span className="absolute text-in-triangle bg-[#212121] text-[#C8E63E] font-bold w-8 h-8 text-center rounded-full flex items-center justify-center">
+                                        {item.id}
+                                    </span>
+                                </div>
+                                <div className="flex flex-col sm:ml-2 p-4 sm:p-4 w-[392px]">
+                                    <div className="flex flex-wrap justify-between items-center">
+                                        <h4 className="text-[#C8E63E] text-2xl sm:text-lg 2xl:text-2xl font-semibold sm:mb-3">
                                             {item.name}
                                         </h4>
-                                        <span className="font-normal text-center text-sm text-black bg-[#40B5CB] mr-[70px] py-1 px-2 sm:mr-2 -mt-2 rounded-md">
+                                        <span className="font-normal text-center text-sm text-black bg-[#40B5CB] mr-[70px] py-1 px-2 sm:mr-2 sm:-mt-2 rounded-md">
                                             {item.species}
                                         </span>
                                     </div>
@@ -187,14 +207,19 @@ export const CharactersCards = () => {
                     ))}
                 </div>
             ) : (
-                <NotFound search={search} />
+                <NotFound
+                    search={filtering ? undefined : search}
+                    filtering={filtering}
+                />
             )}
 
-            <PaginationComponent
-                total={totalPages}
-                current={currentPage}
-                onPageChange={handlePageChange}
-            />
+            <div className="flex justify-center mt-6">
+                <PaginationComponent
+                    total={totalPages}
+                    current={currentPage}
+                    onPageChange={handlePageChange}
+                />
+            </div>
         </>
     );
 };

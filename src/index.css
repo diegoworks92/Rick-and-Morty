@@ -4,18 +4,19 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    background: url("https://static.vecteezy.com/system/resources/thumbnails/021/413/707/original/space-background-animation-white-particles-overlay-stars-backdrop-video.jpg") repeat, #212121;
     font-family: 'Exo 2', cursive;
 }
 
 .pagination {
     margin-left: 400px;
     margin-right: 400px;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
 }
-
+.parallax-bg {
+    height: 100vh;
+    overflow: auto;
+}
 .page-item .page-link {
     position: relative;
     display: block;
@@ -35,7 +36,6 @@ body {
     background-color: #BCDA3F;
 }
 
-
 .page-item.active .page-link {
     color: black;
     background-color: #40B5CB;
@@ -46,8 +46,28 @@ body {
 }
 
 .page-item.disabled .page-link {
-    color: #40B5CB;
+    color: #40B5CB; 
     background-color: #212121;
     border-color: #40B5CB;
+/* display: none; */
+}
 
+.triangle {
+    width: 0;
+    height: 0;
+    border-right: 70px solid #40B5CB;
+    border-top: 70px solid transparent;
+
+}
+
+.text-in-triangle {
+    position: absolute;
+    top: -35px;
+    right: -65px;
+}
+
+@media (max-width:430px){
+    .page-item.disabled .page-link {
+        display: none;
+    }
 }
