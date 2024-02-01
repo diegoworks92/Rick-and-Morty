@@ -6,5 +6,3 @@ This is a web project developed with React, which uses the API of the ‘Rick an
 :computer: Desktop View
 ![rick-and-morty](https://github.com/diegoworks92/Rick-and-Morty/assets/155651264/ac4dcbe7-76ff-425f-847c-566f836de484)
 =======
-
-> > > > > > > origin/main
