@@ -7,7 +7,7 @@ import Status from './Status';
 import Filter from './Filter';
 import FetchCharacters from './FetchCharacters';
 
-export const CharactersCards = () => {
+const CharactersCards = () => {
     const [search, setSearch] = useState('');
     const [characters, setCharacters] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -158,6 +158,7 @@ export const CharactersCards = () => {
                                 <div className="sm:w-32 sm:h-32 relative left-5 sm:inline-block mx-auto overflow-hidden sm:rounded-full">
                                     <img
                                         src={item.image}
+                                        alt="character from the rick and morty series"
                                         className="object-cover border-[#40B5CB] border-4 sm:w-full h-full rounded-full"
                                     />
                                 </div>
@@ -223,3 +224,5 @@ export const CharactersCards = () => {
         </>
     );
 };
+
+export default CharactersCards;
