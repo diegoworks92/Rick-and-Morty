@@ -8,7 +8,12 @@ export default {
   ],
   presets: [keepPreset],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        morty: "#BCDA3F",
+        rick: "#40B5CB",
+      },
+    },
   },
   plugins: [],
 };

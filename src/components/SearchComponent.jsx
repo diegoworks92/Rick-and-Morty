@@ -1,22 +1,29 @@
 import { useState } from 'react';
 import Button from './Button';
 
-const SearchComponent = ({ setSearch, setFiltering }) => {
+const SearchComponent = ({ setSearch, setFilters, setCurrentPage }) => {
     const [inputValue, setInputValue] = useState('');
 
     const searchBtn = (e) => {
         e.preventDefault();
         setSearch(inputValue);
+        setCurrentPage(1); // Reset the current page to 1
     };
 
     const resetBtn = (e) => {
         e.preventDefault();
         setInputValue('');
         setSearch('');
+        setFilters({
+            species: '',
+            status: '',
+            name: '',
+            gender: '',
+        });
     };
 
     return (
-        <form className="gap-3 sm:gap-4 sm:ml-0 mb-5 flex justify-center sm:justify-start">
+        <form className="gap-3 sm:gap-4 sm:ml-0 mb-5 flex justify-center sm:justify-start h-10">
             <input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

@@ -1,21 +1,37 @@
+import axios from 'axios';
+
 const FetchCharacters = async ({
     search,
     setCharacters,
     setTotalPages,
-    currentPage,
+    filters,
 }) => {
-    let url = `https://rickandmortyapi.com/api/character/?page=${currentPage}`;
+    let url = `https://rickandmortyapi.com/api/character`;
 
-    if (search) {
-        url += `&name=${search}`;
-    }
+    // Adds search parameters and filters to the URL
+    let params = new URLSearchParams();
+    if (search) params.append('name', search);
+    if (filters.species) params.append('species', filters.species);
+    if (filters.status) params.append('status', filters.status);
+    if (filters.gender) params.append('gender', filters.gender);
+    url += `?${params.toString()}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data.results) {
-        setCharacters(data.results);
-        setTotalPages(data.info.pages);
-    } else {
+    let allCharacters = [];
+
+    try {
+        let response = await axios.get(url);
+        let data = response.data;
+        allCharacters = allCharacters.concat(data.results);
+
+        while (data.info.next) {
+            response = await axios.get(data.info.next);
+            data = response.data;
+            allCharacters = allCharacters.concat(data.results);
+        }
+
+        setCharacters(allCharacters);
+        setTotalPages(Math.ceil(allCharacters.length / 20));
+    } catch (error) {
         setCharacters([]);
         setTotalPages(0);
     }

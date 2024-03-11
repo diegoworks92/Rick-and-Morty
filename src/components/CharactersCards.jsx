@@ -6,6 +6,7 @@ import NotFound from './NotFound';
 import Status from './Status';
 import Filter from './Filter';
 import FetchCharacters from './FetchCharacters';
+import AppliedFilters from './AppliedFilters';
 
 const CharactersCards = () => {
     const [search, setSearch] = useState('');
@@ -19,93 +20,7 @@ const CharactersCards = () => {
         name: '',
         gender: '',
     });
-
-    let filteredCharacters = characters;
-
-    if (filters.name === 'A-Z') {
-        filteredCharacters = filteredCharacters.sort((a, b) =>
-            a.name.localeCompare(b.name)
-        );
-    } else if (filters.name === 'Z-A') {
-        filteredCharacters = filteredCharacters.sort((a, b) =>
-            b.name.localeCompare(a.name)
-        );
-    }
-
-    if (filters.status === 'Alive') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.status === 'Alive'
-        );
-    } else if (filters.status === 'Dead') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.status === 'Dead'
-        );
-    } else if (filters.status === 'unknown') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.status === 'unknown'
-        );
-    }
-
-    if (filters.species === 'Alien') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Alien'
-        );
-    } else if (filters.species === 'Animal') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Animal'
-        );
-    } else if (filters.species === 'Cronenberg') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Cronenberg'
-        );
-    } else if (filters.species === 'Human') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Human'
-        );
-    } else if (filters.species === 'Humanoid') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Humanoid'
-        );
-    } else if (filters.species === 'Mythological Creature') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Mythological Creature'
-        );
-    } else if (filters.species === 'Poopybutthole') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Poopybutthole'
-        );
-    } else if (filters.species === 'Robot') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'Robot'
-        );
-    } else if (filters.species === 'unknown') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.species === 'unknown'
-        );
-    }
-
-    if (filters.gender === 'Female') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.gender === 'Female'
-        );
-    } else if (filters.gender === 'Male') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.gender === 'Male'
-        );
-    } else if (filters.gender === 'Genderless') {
-        filteredCharacters = filteredCharacters.filter(
-            (character) => character.gender === 'Genderless'
-        );
-    }
-
-    <FetchCharacters
-        search={search}
-        setCharacters={setCharacters}
-        setTotalPages={setTotalPages}
-        filters={filters}
-        currentPage={currentPage}
-    />;
-
+    const [currentPageCharacters, setCurrentPageCharacters] = useState([]);
     useEffect(() => {
         FetchCharacters({
             search: search,
@@ -114,41 +29,151 @@ const CharactersCards = () => {
             filters: filters,
             currentPage: currentPage,
         });
-        if (
-            search === '' &&
-            Object.values(filters).some((filter) => filter !== '')
-        ) {
-            setFiltering(true); // Establecer filtrado en verdadero si se aplica un filtro y la búsqueda está vacía
-        } else {
-            setFiltering(false); // Establecer filtrado en falso si se realiza una búsqueda
+    }, [search, filters]);
+
+    useEffect(() => {
+        // Applies the alphabetical order filter to all characters
+        let sortedCharacters = [...characters];
+        if (filters.name === 'A-Z') {
+            sortedCharacters.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (filters.name === 'Z-A') {
+            sortedCharacters.sort((a, b) => b.name.localeCompare(a.name));
         }
-    }, [search, currentPage, filters]);
+
+        // Divides the characters into pages
+        let pages = [];
+        for (let i = 0; i < sortedCharacters.length; i += 20) {
+            pages.push(sortedCharacters.slice(i, i + 20));
+        }
+
+        // Sets the characters of the current page
+        setCurrentPageCharacters(pages[currentPage - 1] || []);
+    }, [characters, currentPage, filters]);
+
+    const [filteredCharacters, setFilteredCharacters] = useState([]);
+    useEffect(() => {
+        let newFilteredCharacters = [...characters];
+
+        // Apply the filters here
+        if (filters.name === 'A-Z') {
+            newFilteredCharacters = newFilteredCharacters.sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
+        } else if (filters.name === 'Z-A') {
+            newFilteredCharacters = newFilteredCharacters.sort((a, b) =>
+                b.name.localeCompare(a.name)
+            );
+        }
+
+        if (filters.status === 'Alive') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.status === 'Alive'
+            );
+        } else if (filters.status === 'Dead') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.status === 'Dead'
+            );
+        } else if (filters.status === 'unknown') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.status === 'unknown'
+            );
+        }
+
+        if (filters.species === 'Alien') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Alien'
+            );
+        } else if (filters.species === 'Animal') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Animal'
+            );
+        } else if (filters.species === 'Cronenberg') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Cronenberg'
+            );
+        } else if (filters.species === 'Human') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Human'
+            );
+        } else if (filters.species === 'Humanoid') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Humanoid'
+            );
+        } else if (filters.species === 'Mythological Creature') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Mythological Creature'
+            );
+        } else if (filters.species === 'Poopybutthole') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Poopybutthole'
+            );
+        } else if (filters.species === 'Robot') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'Robot'
+            );
+        } else if (filters.species === 'unknown') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.species === 'unknown'
+            );
+        }
+
+        if (filters.gender === 'Female') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.gender === 'Female'
+            );
+        } else if (filters.gender === 'Male') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.gender === 'Male'
+            );
+        } else if (filters.gender === 'Genderless') {
+            newFilteredCharacters = newFilteredCharacters.filter(
+                (character) => character.gender === 'Genderless'
+            );
+        }
+
+        // Divides the filtered characters into pages
+        let pages = [];
+        for (let i = 0; i < newFilteredCharacters.length; i += 20) {
+            pages.push(newFilteredCharacters.slice(i, i + 20));
+        }
+
+        // Sets the characters of the current page
+        setCurrentPageCharacters(pages[currentPage - 1] || []);
+        // Sets the filtered characters
+        setFilteredCharacters(newFilteredCharacters);
+    }, [characters, filters]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
     return (
         <>
             <div className="flex flex-wrap justify-center gap-4 sm:m-10 mb-9">
                 <SearchComponent
                     setSearch={setSearch}
-                    setFiltering={setFiltering}
+                    setFilters={setFilters}
+                    setCurrentPage={setCurrentPage}
                 />
-                <Filter setFilters={setFilters} setFiltering={setFiltering} />
+                <Filter
+                    setFilters={setFilters}
+                    setFiltering={setFiltering}
+                    setCurrentPage={setCurrentPage}
+                    filters={filters}
+                />
             </div>
+            <AppliedFilters filters={filters} />
 
             <div className="flex justify-center">
                 <PaginationComponent
-                    total={totalPages}
+                    totalCharacters={totalPages * 20}
                     current={currentPage}
                     onPageChange={handlePageChange}
                 />
             </div>
 
-            {filteredCharacters.length > 0 ? (
+            {currentPageCharacters.length > 0 ? (
                 <div className=" flex flex-wrap justify-center">
-                    {filteredCharacters.map((item) => (
+                    {currentPageCharacters.map((item) => (
                         <div
                             key={item.id}
                             className="w-[350px] sm:w-full sm:max-w-xl rounded-2xl rounded-t-full sm:rounded-3xl sm:rounded-l-full flex border-4 border-[#40B5CB] flex-col sm:flex-row sm:mt-10 mb-10 sm:mx-2 xl:mx-8 2xl:mx-20 "
@@ -216,7 +241,7 @@ const CharactersCards = () => {
 
             <div className="flex justify-center mt-6">
                 <PaginationComponent
-                    total={totalPages}
+                    totalCharacters={totalPages * 20}
                     current={currentPage}
                     onPageChange={handlePageChange}
                 />

@@ -11,7 +11,7 @@ const Status = ({ item }) => {
 
     return (
         <div
-            className={`${status()} w-10 h-10 sm:w-7 sm:h-7 absolute rounded-full right-16 sm:right-6 top-9 sm:top-6 border-4 border-[#40B5CB] `}
+            className={`${status()} w-10 h-10 sm:w-7 sm:h-7 absolute rounded-full right-16 sm:right-6 top-9 sm:top-6 border-4 border-rick `}
         ></div>
     );
 };
