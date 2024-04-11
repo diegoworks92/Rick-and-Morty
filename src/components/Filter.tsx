@@ -1,4 +1,6 @@
-import { Button, Dropdown } from 'keep-react';
+import { Dropdown } from 'keep-react';
+import { Dispatch, SetStateAction } from 'react';
+import { Filters } from './types';
 import {
     SquaresFour,
     Question,
@@ -19,12 +21,24 @@ import {
     LinuxLogo,
 } from 'phosphor-react';
 
-const Filter = ({ setFilters, setFiltering, setCurrentPage, filters }) => {
+interface FilterProps {
+    setFilters: Dispatch<SetStateAction<Filters>>;
+    setFiltering: Dispatch<SetStateAction<boolean>>;
+    setCurrentPage: Dispatch<SetStateAction<number>>;
+    filters: Filters;
+}
+
+const Filter = ({
+    setFilters,
+    setFiltering,
+    setCurrentPage,
+    filters,
+}: FilterProps) => {
     return (
         <Dropdown
             label="Filter"
             dismissOnClick={false}
-            floatingArrow="true"
+            floatingArrow={true}
             className="bg-rick hover:bg-morty text-black rounded-lg transform transition-transform duration-150 ease-in-out active:scale-90 h-10 w-80 sm:w-full"
         >
             <div className="flex justify-center m-2">
@@ -33,7 +47,7 @@ const Filter = ({ setFilters, setFiltering, setCurrentPage, filters }) => {
                     size="sm"
                     placement="right"
                     trigger="hover"
-                    arrowIcon=""
+                    arrowIcon={false}
                     className="focus:outline-none border-none rounded-none w-36 bg-rick hover:bg-morty text-black"
                 >
                     {' '}
@@ -78,7 +92,7 @@ const Filter = ({ setFilters, setFiltering, setCurrentPage, filters }) => {
                     size="sm"
                     placement="right"
                     trigger="hover"
-                    arrowIcon=""
+                    arrowIcon={false}
                     className="focus:outline-none border-none rounded-none w-36 bg-rick hover:bg-morty text-black"
                 >
                     <Dropdown.Item
@@ -154,7 +168,7 @@ const Filter = ({ setFilters, setFiltering, setCurrentPage, filters }) => {
                     size="sm"
                     placement="right"
                     trigger="hover"
-                    arrowIcon=""
+                    arrowIcon={false}
                     className="focus:outline-none border-none rounded-none w-36 bg-rick hover:bg-morty text-black"
                 >
                     <Dropdown.Item
@@ -329,7 +343,7 @@ const Filter = ({ setFilters, setFiltering, setCurrentPage, filters }) => {
                     size="sm"
                     placement="right"
                     trigger="hover"
-                    arrowIcon=""
+                    arrowIcon={false}
                     className="focus:outline-none border-none rounded-none w-36 bg-rick hover:bg-morty text-black"
                 >
                     <Dropdown.Item
@@ -397,26 +411,6 @@ const Filter = ({ setFilters, setFiltering, setCurrentPage, filters }) => {
                         Male
                     </Dropdown.Item>
                 </Dropdown>
-            </div>
-
-            <div className="flex justify-center m-2">
-                <Button
-                    size="sm"
-                    type="linkGray"
-                    className="focus:outline-none border-none rounded-none w-36 bg-rick hover:bg-morty text-black"
-                    onClick={() => {
-                        setFilters({
-                            species: '',
-                            status: '',
-                            name: '',
-                            gender: '',
-                        });
-                        setFiltering(false);
-                        setCurrentPage(1);
-                    }}
-                >
-                    Reset
-                </Button>
             </div>
         </Dropdown>
     );

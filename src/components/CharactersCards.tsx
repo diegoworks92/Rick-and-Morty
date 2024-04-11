@@ -1,26 +1,29 @@
 import { useEffect, useState } from 'react';
 import SearchComponent from './SearchComponent';
 import PaginationComponent from './PaginationComponent';
-
 import NotFound from './NotFound';
 import Status from './Status';
 import Filter from './Filter';
 import FetchCharacters from './FetchCharacters';
 import AppliedFilters from './AppliedFilters';
+import { Character } from './types';
+import { Filters } from './types';
 
 const CharactersCards = () => {
-    const [search, setSearch] = useState('');
-    const [characters, setCharacters] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [filtering, setFiltering] = useState(false);
-    const [filters, setFilters] = useState({
+    const [search, setSearch] = useState<string>('');
+    const [characters, setCharacters] = useState<Character[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const [filtering, setFiltering] = useState<boolean>(false);
+    const [filters, setFilters] = useState<Filters>({
         species: '',
         status: '',
         name: '',
         gender: '',
     });
-    const [currentPageCharacters, setCurrentPageCharacters] = useState([]);
+    const [currentPageCharacters, setCurrentPageCharacters] = useState<
+        Character[]
+    >([]);
     useEffect(() => {
         FetchCharacters({
             search: search,
@@ -29,11 +32,11 @@ const CharactersCards = () => {
             filters: filters,
             currentPage: currentPage,
         });
-    }, [search, filters]);
+    }, [search, filters, currentPage]);
 
     useEffect(() => {
         // Applies the alphabetical order filter to all characters
-        let sortedCharacters = [...characters];
+        const sortedCharacters = [...characters];
         if (filters.name === 'A-Z') {
             sortedCharacters.sort((a, b) => a.name.localeCompare(b.name));
         } else if (filters.name === 'Z-A') {
@@ -41,7 +44,7 @@ const CharactersCards = () => {
         }
 
         // Divides the characters into pages
-        let pages = [];
+        const pages = [];
         for (let i = 0; i < sortedCharacters.length; i += 20) {
             pages.push(sortedCharacters.slice(i, i + 20));
         }
@@ -50,7 +53,9 @@ const CharactersCards = () => {
         setCurrentPageCharacters(pages[currentPage - 1] || []);
     }, [characters, currentPage, filters]);
 
-    const [filteredCharacters, setFilteredCharacters] = useState([]);
+    const [filteredCharacters, setFilteredCharacters] = useState<Character[]>(
+        []
+    );
     useEffect(() => {
         let newFilteredCharacters = [...characters];
 
@@ -132,7 +137,7 @@ const CharactersCards = () => {
         }
 
         // Divides the filtered characters into pages
-        let pages = [];
+        const pages = [];
         for (let i = 0; i < newFilteredCharacters.length; i += 20) {
             pages.push(newFilteredCharacters.slice(i, i + 20));
         }
@@ -141,9 +146,9 @@ const CharactersCards = () => {
         setCurrentPageCharacters(pages[currentPage - 1] || []);
         // Sets the filtered characters
         setFilteredCharacters(newFilteredCharacters);
-    }, [characters, filters]);
+    }, [characters, filters, currentPage]);
 
-    const handlePageChange = (page) => {
+    const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
     return (
@@ -153,6 +158,7 @@ const CharactersCards = () => {
                     setSearch={setSearch}
                     setFilters={setFilters}
                     setCurrentPage={setCurrentPage}
+                    setFiltering={setFiltering}
                 />
                 <Filter
                     setFilters={setFilters}
@@ -234,7 +240,7 @@ const CharactersCards = () => {
                 </div>
             ) : (
                 <NotFound
-                    search={filtering ? undefined : search}
+                    search={filtering ? '' : search}
                     filtering={filtering}
                 />
             )}

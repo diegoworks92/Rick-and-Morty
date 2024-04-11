@@ -1,19 +1,37 @@
 import { useState } from 'react';
 import Button from './Button';
 
-const SearchComponent = ({ setSearch, setFilters, setCurrentPage }) => {
+interface SearchComponentProps {
+    setSearch: (value: string) => void;
+    setFilters: (value: {
+        species: string;
+        status: string;
+        name: string;
+        gender: string;
+    }) => void;
+    setCurrentPage: (value: number) => void;
+    setFiltering: (value: boolean) => void;
+}
+
+const SearchComponent: React.FC<SearchComponentProps> = ({
+    setSearch,
+    setFilters,
+    setCurrentPage,
+    setFiltering,
+}) => {
     const [inputValue, setInputValue] = useState('');
 
-    const searchBtn = (e) => {
+    const searchBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSearch(inputValue);
         setCurrentPage(1); // Reset the current page to 1
     };
 
-    const resetBtn = (e) => {
+    const resetBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setInputValue('');
         setSearch('');
+        setFiltering(false);
         setFilters({
             species: '',
             status: '',

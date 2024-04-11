@@ -1,4 +1,12 @@
-const Status = ({ item }) => {
+interface Item {
+    status: string;
+}
+
+interface StatusProps {
+    item: Item;
+}
+
+const Status: React.FC<StatusProps> = ({ item }) => {
     const status = () => {
         if (item.status === 'Alive') {
             return 'bg-green-700';

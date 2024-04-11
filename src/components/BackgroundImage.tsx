@@ -1,4 +1,10 @@
-const BackgroundImage = ({ children }) => {
+import { ReactNode } from 'react';
+
+interface BackgroundImageProps {
+    children: ReactNode;
+}
+
+const BackgroundImage = ({ children }: BackgroundImageProps) => {
     return (
         <div
             className="parallax-bg bg-fixed bg-no-repeat bg-cover bg-center"

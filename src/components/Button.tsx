@@ -1,4 +1,9 @@
-const Button = ({ btn, nameBtn }) => {
+interface ButtonProps {
+    btn: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    nameBtn: string;
+}
+
+const Button: React.FC<ButtonProps> = ({ btn, nameBtn }) => {
     return (
         <button
             onClick={btn}
