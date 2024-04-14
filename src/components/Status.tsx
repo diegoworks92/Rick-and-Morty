@@ -19,7 +19,7 @@ const Status: React.FC<StatusProps> = ({ item }) => {
 
     return (
         <div
-            className={`${status()} w-10 h-10 sm:w-7 sm:h-7 absolute rounded-full right-16 sm:right-6 top-9 sm:top-6 border-4 border-rick `}
+            className={`${status()} w-10 h-10 xl:w-7 xl:h-7 absolute rounded-full right-12 xl:right-6 top-10 xl:top-6 border-4 border-rick `}
         ></div>
     );
 };
