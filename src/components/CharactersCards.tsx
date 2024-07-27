@@ -8,8 +8,10 @@ import FetchCharacters from './FetchCharacters';
 import AppliedFilters from './AppliedFilters';
 import { Character } from './types';
 import { Filters } from './types';
+import LoadingComponent from './LoadingComponent';
 
 const CharactersCards = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
     const [characters, setCharacters] = useState<Character[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -24,14 +26,21 @@ const CharactersCards = () => {
     const [currentPageCharacters, setCurrentPageCharacters] = useState<
         Character[]
     >([]);
+
     useEffect(() => {
+        setIsLoading(true);
         FetchCharacters({
             search: search,
             setCharacters: setCharacters,
             setTotalPages: setTotalPages,
             filters: filters,
             currentPage: currentPage,
-        });
+        })
+            .then(() => setIsLoading(false))
+            .catch((error) => {
+                console.error(error);
+                setIsLoading(false);
+            });
     }, [search, filters, currentPage]);
 
     useEffect(() => {
@@ -177,7 +186,9 @@ const CharactersCards = () => {
                 />
             </div>
 
-            {currentPageCharacters.length > 0 ? (
+            {isLoading ? (
+                <LoadingComponent />
+            ) : currentPageCharacters.length > 0 ? (
                 <div className=" flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-6 xl:gap-0">
                     {currentPageCharacters.map((item) => (
                         <div
